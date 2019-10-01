@@ -22,6 +22,8 @@ namespace TaskiesBlazor
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseSetting(WebHostDefaults.DetailedErrorsKey, "true");
+                    webBuilder.UseEnvironment(Environments.Development);
                     webBuilder.UseStartup<Startup>();
                 });
     }

@@ -10,7 +10,7 @@ else
 {
     @foreach (var block in taskBlocks)
     {
-        <TaskBlock taskBlock="block" NewEvent="NewBlock" @key="block" />
+        <TaskBlock taskBlock="block" @key="block" RemoveCall="RemoveBlock" NewBlock="CreateBlock"/>
     }
 }
 
@@ -27,14 +27,17 @@ else
         });
     }
 
-    private void NewBlock(Data.TaskBlock taskBlock)
+    private void RemoveBlock(int idTaskBlock)
     {
-        //taskBlocks.RemoveAt(taskBlocks.Count - 1);
-        //taskBlocks.Add(taskBlock);
-        //taskBlocks.Add(new Data.TaskBlock()
-        //{
-        //    idTaskBlock = 0,
-        //    Tasks = new List<Data.Taskie>()
-        //});
+        Data.TaskBlock taskBlock = taskBlocks.FirstOrDefault(block => block.idTaskBlock == idTaskBlock);
+        taskBlocks.Remove(taskBlock);
+    }
+    private void CreateBlock()
+    {
+        taskBlocks.Add(new Data.TaskBlock()
+        {
+            idTaskBlock = 0,
+            Tasks = new List<Data.Taskie>()
+        });
     }
 }

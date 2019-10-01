@@ -15,7 +15,7 @@
                     <a class="btn-floating red">
                         <i class="large material-icons" @onmouseover="ShowMenu">menu</i>
                     </a>
-                    <MenuBlock @ref="Menu" @bind-color="color" idTaskBlock="taskBlock.idTaskBlock" />
+                    <MenuBlock @ref="Menu" @bind-color="color" idTaskBlock="taskBlock.idTaskBlock" RemoveCall="RemoveBlock" />
                 </div>
                 <span class="card-title">@taskBlock.deTaskBlock</span>
             }
@@ -60,19 +60,18 @@
         Menu.Hide();
     }
 
-    private async Task CreateBlock()
-    {
-        taskBlock.idTaskBlock = 10;
-        await NewEvent.InvokeAsync(taskBlock);
-        StateHasChanged();
-    }
-
     private async Task NewBlockKey(KeyboardEventArgs keyboardEvent)
     {
         if(keyboardEvent.Code == "Enter")
         {
-            await Task.Run(CreateBlock);
+           await CreateBlock();
         }
+    }
+
+    private async Task CreateBlock()
+    {
+        taskBlock.idTaskBlock = 10;
+        await NewBlock.InvokeAsync(taskBlock.idTaskBlock);
     }
 
     private async Task NewTaskKey(KeyboardEventArgs eventArgs)
@@ -94,5 +93,11 @@
         newTask = string.Empty;
     }
     [Parameter]
-    public EventCallback<Data.TaskBlock> NewEvent { get; set; }
+    public EventCallback<int> NewBlock { get; set; }
+    [Parameter]
+    public EventCallback<int> RemoveCall { get; set; }
+    private async Task RemoveBlock(int idTaskBlock)
+    {
+        await RemoveCall.InvokeAsync(idTaskBlock);
+    }
 }
