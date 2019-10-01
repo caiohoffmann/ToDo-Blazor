@@ -1,0 +1,40 @@
+﻿@page "/Task"
+@using TaskiesBlazor.Data
+@inject TaskBlockService taskBlockService
+<h3>Taskies</h3>
+@if (taskBlocks == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @foreach (var block in taskBlocks)
+    {
+        <TaskBlock taskBlock="block" NewEvent="NewBlock" @key="block" />
+    }
+}
+
+@code {
+    IList<Data.TaskBlock> taskBlocks;
+
+    protected override async Task OnInitializedAsync()
+    {
+        taskBlocks = await taskBlockService.GetTaskBlocksAsync();
+        taskBlocks.Add(new Data.TaskBlock()
+        {
+            idTaskBlock = 0,
+            Tasks = new List<Data.Taskie>()
+        });
+    }
+
+    private void NewBlock(Data.TaskBlock taskBlock)
+    {
+        //taskBlocks.RemoveAt(taskBlocks.Count - 1);
+        //taskBlocks.Add(taskBlock);
+        //taskBlocks.Add(new Data.TaskBlock()
+        //{
+        //    idTaskBlock = 0,
+        //    Tasks = new List<Data.Taskie>()
+        //});
+    }
+}

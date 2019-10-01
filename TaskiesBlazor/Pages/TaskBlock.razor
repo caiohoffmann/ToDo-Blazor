@@ -1,0 +1,98 @@
+﻿<div class="col s12 m6" data-taskblock-id="@taskBlock.idTaskBlock">
+    <div class="card" style="background-color:@color;">
+        <div class="card-content white-text">
+            @if (taskBlock.idTaskBlock == 0)
+            {
+                <div class="input-field">
+                    <input id="new-taskblock-@taskBlock.idTaskBlock" type="text" class="validate" data-type="new-taskblock"  @bind="taskBlock.deTaskBlock" @onkeypress="NewBlockKey" />
+                    <label for="new-taskblock-@taskBlock.idTaskBlock">New Task Block</label>
+                    <i class="material-icons prefix posfix" @onclick="CreateBlock">add_circle</i>
+                </div>
+            }
+            else
+            {
+                <div class="icon-menu" @onmouseout="HideMenu">
+                    <a class="btn-floating red">
+                        <i class="large material-icons" @onmouseover="ShowMenu">menu</i>
+                    </a>
+                    <MenuBlock @ref="Menu" @bind-color="color" idTaskBlock="taskBlock.idTaskBlock" />
+                </div>
+                <span class="card-title">@taskBlock.deTaskBlock</span>
+            }
+            <ul>
+                @if (taskBlock.idTaskBlock != 0)
+                {
+                    @foreach (var task in taskBlock.Tasks)
+                    {
+                        <Tasks task="task" />
+                    }
+                    <li data-type="new-task-li">
+                        <div class="input-field">
+                            <input id="new-task-@taskBlock.idTaskBlock" type="text" class="validate" @bind="newTask" @onkeyup="NewTaskKey" />
+                            <label for="new-task-@taskBlock.idTaskBlock">New Task</label>
+                            <i class="material-icons prefix posfix" @onclick="NewTask">add_circle</i>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Data.TaskBlock taskBlock { get; set; }
+    private string newTask;
+
+    private string newBlock;
+
+    private string color = "teal";
+
+    private MenuBlock Menu;
+
+    private void ShowMenu()
+    {
+        Menu.Show();
+    }
+
+    private void HideMenu()
+    {
+        Menu.Hide();
+    }
+
+    private async Task CreateBlock()
+    {
+        taskBlock.idTaskBlock = 10;
+        await NewEvent.InvokeAsync(taskBlock);
+        StateHasChanged();
+    }
+
+    private async Task NewBlockKey(KeyboardEventArgs keyboardEvent)
+    {
+        if(keyboardEvent.Code == "Enter")
+        {
+            await Task.Run(CreateBlock);
+        }
+    }
+
+    private async Task NewTaskKey(KeyboardEventArgs eventArgs)
+    {
+        if(eventArgs.Code == "Enter")
+        {
+            await Task.Run(NewTask);
+        }
+    }
+
+    private void NewTask()
+    {
+        taskBlock.Tasks.Add(new Data.Taskie()
+        {
+            idTaskBlock = taskBlock.idTaskBlock,
+            idTask = 10,
+            deTask = newTask
+        });
+        newTask = string.Empty;
+    }
+    [Parameter]
+    public EventCallback<Data.TaskBlock> NewEvent { get; set; }
+}
