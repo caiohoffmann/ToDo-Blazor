@@ -11,7 +11,7 @@ namespace TaskiesBlazor.Model
         public static Context GetContext()
         {
             var optionsBuilder = new DbContextOptionsBuilder<Context>();
-            optionsBuilder.UseSqlServer("Server=tcp:ses22h08rw.database.windows.net,1433;Initial Catalog=ToDo;Persist Security Info=False;User ID=FestaDuroDB;Password=Hugo$#Caio;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            optionsBuilder.UseSqlServer("connection string");
             return new Context(optionsBuilder.Options);
         }
     }

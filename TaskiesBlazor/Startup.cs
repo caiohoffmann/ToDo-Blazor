@@ -35,7 +35,7 @@ namespace TaskiesBlazor
             services.AddSingleton<TaskBlockService>();
             services.AddSingleton<TaskieService>();
             services.AddEntityFrameworkSqlServer().AddDbContext<Context>(_ => {
-                _.UseSqlServer("Server=tcp:ses22h08rw.database.windows.net,1433;Initial Catalog=ToDo;Persist Security Info=False;User ID=FestaDuroDB;Password=Hugo$#Caio;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+                _.UseSqlServer("connection string");
             });
         }
 
