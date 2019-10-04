@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using TaskiesBlazor.Data;
-using TaskiesBlazor.Model;
+using TaskiesBlazor.Models;
 
 namespace TaskiesBlazor
 {
@@ -35,7 +35,7 @@ namespace TaskiesBlazor
             services.AddSingleton<TaskBlockService>();
             services.AddSingleton<TaskieService>();
             services.AddEntityFrameworkSqlServer().AddDbContext<Context>(_ => {
-                _.UseSqlServer("connection string");
+                _.UseSqlServer(Helpers.Keys.ConnectionString);
             });
         }
 

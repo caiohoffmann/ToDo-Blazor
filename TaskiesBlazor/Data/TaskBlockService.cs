@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TaskiesBlazor.Model;
+using TaskiesBlazor.Models;
 
 namespace TaskiesBlazor.Data
 {

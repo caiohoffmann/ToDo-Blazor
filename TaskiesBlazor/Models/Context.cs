@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TaskiesBlazor.Data;
 
-namespace TaskiesBlazor.Model
+namespace TaskiesBlazor.Models
 {
     public class Context : DbContext
     {
