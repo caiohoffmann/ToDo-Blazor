@@ -23,7 +23,8 @@ else
         taskBlocks.Add(new Data.TaskBlock()
         {
             idTaskBlock = 0,
-            Tasks = new List<Data.Taskie>()
+            Tasks = new List<Data.Taskie>(),
+            coColor = "teal"
         });
     }
 
@@ -32,12 +33,17 @@ else
         Data.TaskBlock taskBlock = taskBlocks.FirstOrDefault(block => block.idTaskBlock == idTaskBlock);
         taskBlocks.Remove(taskBlock);
     }
-    private void CreateBlock()
+    private async Task CreateBlock(Data.TaskBlock taskBlock)
     {
+        taskBlock = await taskBlockService.AddAsync(taskBlock);
+        taskBlocks.RemoveAt(taskBlocks.Count - 1);
+        taskBlocks.Add(taskBlock);
         taskBlocks.Add(new Data.TaskBlock()
         {
             idTaskBlock = 0,
-            Tasks = new List<Data.Taskie>()
+            Tasks = new List<Data.Taskie>(),
+            coColor = "teal"
         });
+        
     }
 }

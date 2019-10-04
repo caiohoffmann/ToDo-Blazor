@@ -7,36 +7,38 @@ using TaskiesBlazor.Model;
 
 namespace TaskiesBlazor.Data
 {
-    public class TaskBlockService
+    public class TaskieService
     {
         private Context _context;
 
-        public async Task<IList<TaskBlock>> GetTaskBlocksAsync()
+        public async Task<IList<Taskie>> GetTaskiesAsync()
         {
             using (_context = ContextFactory.GetContext())
             {
-                return await _context.TaskBlocks.Include(tb => tb.Tasks).ToListAsync();
+                return await _context.Taskies.ToListAsync();
             }
         }
 
-        public async Task<TaskBlock> AddAsync(TaskBlock taskBlock)
+        public async Task<Taskie> AddTaskieAsync(Taskie taskie)
         {
+            taskie.dtModified = DateTime.Now;
             using (_context = ContextFactory.GetContext())
             {
-                taskBlock.dtModified = DateTime.Now;
-                await _context.TaskBlocks.AddAsync(taskBlock);
+                await _context.Taskies.AddAsync(taskie);
                 await _context.SaveChangesAsync();
-                return taskBlock;
             }
+            return taskie;
         }
 
-        public async Task UpdateAsync(TaskBlock taskBlock)
+        public async Task<Taskie> UpdateTaskie(Taskie taskie)
         {
+            taskie.dtModified = DateTime.Now;
             using (_context = ContextFactory.GetContext())
             {
-                _context.Update(taskBlock);
+                _context.Update(taskie);
                 await _context.SaveChangesAsync();
             }
+            return taskie;
         }
     }
 }

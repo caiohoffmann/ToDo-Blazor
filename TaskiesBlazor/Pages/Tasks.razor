@@ -1,8 +1,10 @@
-﻿<li>
+﻿@using TaskiesBlazor.Data
+@inject TaskieService taskieService
+<li>
     <div class="task-container" data-taskblock-id="@task.idTask">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <label class="white-text">
-                <input type="checkbox" data-task-id="@task.idTask" data-type="task-check" @onclick="UpdateTask" @bind="done"/>
+                <input type="checkbox" data-task-id="@task.idTask" data-type="task-check" @bind="task.isCompleted" @onclick="UpdateTask"/>
                 <span>@task.deTask</span>
             </label>
         </div>
@@ -13,10 +15,9 @@
     [Parameter]
     public Data.Taskie task { get; set; }
 
-    private bool done;
-
-    private void UpdateTask()
+    private async Task UpdateTask()
     {
-
+        task.isCompleted = !task.isCompleted;
+        task = await taskieService.UpdateTaskie(task);
     }
 }

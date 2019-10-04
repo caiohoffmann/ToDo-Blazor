@@ -1,10 +1,13 @@
-﻿<div class="col s12 m6" data-taskblock-id="@taskBlock.idTaskBlock">
-    <div class="card" style="background-color:@color;">
+﻿@using TaskiesBlazor.Data
+@inject TaskBlockService taskBlockService
+@inject TaskieService taskieService
+<div class="col s12 m6" data-taskblock-id="@taskBlock.idTaskBlock">
+    <div class="card" style="background-color:@taskBlock.coColor;">
         <div class="card-content white-text">
             @if (taskBlock.idTaskBlock == 0)
             {
                 <div class="input-field">
-                    <input id="new-taskblock-@taskBlock.idTaskBlock" type="text" class="validate" data-type="new-taskblock"  @bind="taskBlock.deTaskBlock" @onkeypress="NewBlockKey" />
+                    <input id="new-taskblock-@taskBlock.idTaskBlock" type="text" class="validate" data-type="new-taskblock" @bind="taskBlock.deTaskBlock" @onkeypress="NewBlockKey" />
                     <label for="new-taskblock-@taskBlock.idTaskBlock">New Task Block</label>
                     <i class="material-icons prefix posfix" @onclick="CreateBlock">add_circle</i>
                 </div>
@@ -15,7 +18,7 @@
                     <a class="btn-floating red">
                         <i class="large material-icons" @onmouseover="ShowMenu">menu</i>
                     </a>
-                    <MenuBlock @ref="Menu" @bind-color="color" idTaskBlock="taskBlock.idTaskBlock" RemoveCall="RemoveBlock" />
+                    <MenuBlock @ref="Menu" idTaskBlock="taskBlock.idTaskBlock" RemoveCall="RemoveBlock" ColorChanged="ChangeColor" />
                 </div>
                 <span class="card-title">@taskBlock.deTaskBlock</span>
             }
@@ -62,42 +65,48 @@
 
     private async Task NewBlockKey(KeyboardEventArgs keyboardEvent)
     {
-        if(keyboardEvent.Code == "Enter")
+        if (keyboardEvent.Code == "Enter")
         {
-           await CreateBlock();
+            await CreateBlock();
         }
     }
 
     private async Task CreateBlock()
     {
-        taskBlock.idTaskBlock = 10;
-        await NewBlock.InvokeAsync(taskBlock.idTaskBlock);
+        taskBlock.coColor = color;
+        await NewBlock.InvokeAsync(taskBlock);
     }
 
     private async Task NewTaskKey(KeyboardEventArgs eventArgs)
     {
-        if(eventArgs.Code == "Enter")
+        if (eventArgs.Code == "Enter")
         {
-            await Task.Run(NewTask);
+            await NewTask();
         }
     }
 
-    private void NewTask()
+    private async Task NewTask()
     {
-        taskBlock.Tasks.Add(new Data.Taskie()
+        var taskie = new Data.Taskie()
         {
             idTaskBlock = taskBlock.idTaskBlock,
-            idTask = 10,
             deTask = newTask
-        });
+        };
+        taskie = await taskieService.AddTaskieAsync(taskie);
+        taskBlock.Tasks.Add(taskie);
         newTask = string.Empty;
     }
     [Parameter]
-    public EventCallback<int> NewBlock { get; set; }
+    public EventCallback<Data.TaskBlock> NewBlock { get; set; }
     [Parameter]
     public EventCallback<int> RemoveCall { get; set; }
     private async Task RemoveBlock(int idTaskBlock)
     {
         await RemoveCall.InvokeAsync(idTaskBlock);
+    }
+    private async Task ChangeColor(string color)
+    {
+        taskBlock.coColor = color;
+        await taskBlockService.UpdateAsync(taskBlock);
     }
 }

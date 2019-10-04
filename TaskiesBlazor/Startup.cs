@@ -6,10 +6,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using TaskiesBlazor.Data;
+using TaskiesBlazor.Model;
 
 namespace TaskiesBlazor
 {
@@ -30,6 +33,10 @@ namespace TaskiesBlazor
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
             services.AddSingleton<TaskBlockService>();
+            services.AddSingleton<TaskieService>();
+            services.AddEntityFrameworkSqlServer().AddDbContext<Context>(_ => {
+                _.UseSqlServer("Server=tcp:ses22h08rw.database.windows.net,1433;Initial Catalog=ToDo;Persist Security Info=False;User ID=FestaDuroDB;Password=Hugo$#Caio;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
